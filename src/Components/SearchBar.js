@@ -121,6 +121,7 @@ const SearchBar = () => {
   const SearchData = () => {
     if (IMDBctx.searchValue !== "") {
       IMDBctx.setMoviesData([]);
+      IMDBctx.setIsDataFetching(true);
       const options = {
         method: "GET",
         headers: {
@@ -137,14 +138,11 @@ const SearchBar = () => {
         .then((response) => response.json())
         .then((response) => {
           IMDBctx.setMoviesData(response.d);
+          IMDBctx.setIsDataFetching(false);
         })
         .catch((err) => console.error(err));
     }
   };
-
-  useEffect(() => {
-    console.log(IMDBctx.searchValue);
-  }, [IMDBctx.searchValue, IMDBctx]);
 
   return (
     <>
@@ -157,24 +155,15 @@ const SearchBar = () => {
             IMDBctx.setSearchValue(e.target.value);
           }}
         ></input>
-                <Tooltip
-          content="Search Movie"
-          animate={{
-            mount: { scale: 1, y: 0 },
-            unmount: { scale: 0, y: 25 },
-          }}
-          className="bg-[#3699ff] p-2 rounded-md"
-        >
+
         <button
-        className="mx-2"
+          className="mx-2"
           onClick={() => {
             SearchData();
           }}
         >
-          <FaSearch color="#000"/>
+          <FaSearch color="#000" />
         </button>
-        </Tooltip>
-
       </div>
     </>
   );
